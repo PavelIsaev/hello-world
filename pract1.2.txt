@@ -1,0 +1,64 @@
+%load_ext sql
+%sql sqlite:///tst_1.db
+//////////////////////////////////////////////////
+%sql select 1
+//////////////////////////////////////////////////
+%%sql
+Select 1
+union
+select 2
+//////////////////////////////////////////////////
+Создадим таблицу Студентов со следующими полями:
+Student_id - уникальный идентификатор студента
+Name - имя студента
+Second Name - фамилия студенты
+Faculty - факультет студента
+StudyGroup - группа студента
+GPA - средний балл
+//////////////////////////////////////////////////
+%%sql 
+drop table if exists Students;
+
+CREATE TABLE Students 
+(
+    student_id integer primary key, 
+    Name varchar(50),
+    SecondName varchar(50), 
+    Faculty varchar(20),
+    StudyGroup varchar(20),
+    GPA number
+);
+//////////////////////////////////////////////////
+%sql select * from Students
+//////////////////////////////////////////////////
+%%sql
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (1, 'Anton', 'Sidorov', 'KIB', '101', 3.5);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (2, 'Alexey', 'Petrov', 'IT', '201', 3.3);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (3, 'Ivan', 'Meshkov', 'KIB', '101', 4.5);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (4, 'Elena', 'Kvitova', 'Economics', '301', 4.8);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (5, 'Darya', 'Salnikova', 'It', '202', 3.4);
+//////////////////////////////////////////////////
+%sql select * from Students
+//////////////////////////////////////////////////
+HOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORKHOMEWORK
+//////////////////////////////////////////////////
+%sql select 'Pavel' as name 
+//////////////////////////////////////////////////
+%%sql
+SELECT Name
+FROM Students
+WHERE SecondName='Sidorov';
+//////////////////////////////////////////////////
+%%sql
+SELECT Name
+FROM Students
+WHERE GPA>=4;
+//////////////////////////////////////////////////
+%%sql
+SELECT Name
+FROM Students
+WHERE Name LIKE '%a%' and SecondName LIKE 's%';
+//////////////////////////////////////////////////
+%%sql
+SELECT Faculty 
+from Students GROUP BY Faculty Having Count (distinct StudyGroup)>1;
