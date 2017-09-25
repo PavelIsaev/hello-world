@@ -1,0 +1,154 @@
+Данный notebook печатает классическое "Hello world!.
+Для запуска блока команд, нажмите на него, и используйте SHIFT+ENTER
+Также есть дополнительные keyboard hotkeys (описанные в меню Help)
+In [2]:
+
+print ("Hello world!")
+print ("Hello world!")
+Hello world!
+Проверим, что у вас подключена возможность работы с SQL
+In [2]:
+
+%load_ext sql
+%sql sqlite:///tst_1.db
+The sql extension is already loaded. To reload it, use:
+  %reload_ext sql
+Out[2]:
+'Connected: None@tst_1.db'
+Однострочный SQL-запрос
+In [3]:
+
+%sql select 1
+Done.
+Out[3]:
+1
+1
+Многострочный SQL-запрос
+In [4]:
+
+%%sql
+Select 1
+union
+select 2
+Done.
+Out[4]:
+1
+1
+2
+Создадим таблицу Студентов со следующими полями:
+Student_id - уникальный идентификатор студента
+Name - имя студента
+Second Name - фамилия студенты
+Faculty - факультет студента
+StudyGroup - группа студента
+GPA - средний балл
+In [5]:
+
+%%sql 
+drop table if exists Students;
+?
+CREATE TABLE Students 
+(
+    student_id integer primary key, 
+    Name varchar(50),
+    SecondName varchar(50), 
+    Faculty varchar(20),
+    StudyGroup varchar(20),
+    GPA number
+);
+Done.
+Done.
+Out[5]:
+[]
+Проверим, что таблица создана
+In [6]:
+
+%sql select * from Students
+Done.
+Out[6]:
+student_id	Name	SecondName	Faculty	StudyGroup	GPA
+Заполним таблице данными
+In [7]:
+
+%%sql
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (1, 'Anton', 'Sidorov', 'KIB', '101', 3.5);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (2, 'Alexey', 'Petrov', 'IT', '201', 3.3);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (3, 'Ivan', 'Meshkov', 'KIB', '101', 4.5);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (4, 'Elena', 'Kvitova', 'Economics', '301', 4.8);
+insert into Students(student_id, Name, SecondName, Faculty, StudyGroup, GPA) VALUES (5, 'Darya', 'Salnikova', 'It', '202', 3.4);
+1 rows affected.
+1 rows affected.
+1 rows affected.
+1 rows affected.
+1 rows affected.
+Out[7]:
+[]
+Проверим наличие данных
+In [8]:
+
+%sql select * from Students
+Done.
+Out[8]:
+student_id	Name	SecondName	Faculty	StudyGroup	GPA
+1	Anton	Sidorov	KIB	101	3.5
+2	Alexey	Petrov	IT	201	3.3
+3	Ivan	Meshkov	KIB	101	4.5
+4	Elena	Kvitova	Economics	301	4.8
+5	Darya	Salnikova	It	202	3.4
+Задание 1. Напишите SQL-запрос, возвращающий ваше имя
+In [16]:
+
+name
+%sql select 'Pavel' as name 
+?
+?
+Done.
+Out[16]:
+name
+Pavel
+Задание 2. Напишите SQL-запрос, возвращающий имена всех студентов с фамилией Sidorov
+In [9]:
+
+%%sql
+SELECT Name
+FROM Students
+WHERE SecondName='Sidorov';
+Done.
+Out[9]:
+Name
+Anton
+Задание 3. Выведите все названия факультетов, на которых учится хотя бы один студент со средним баллом не менее 4. Имя факультета должно встречаться один раз в выводе
+In [10]:
+
+%%sql
+SELECT Name
+FROM Students
+WHERE GPA>=4;
+Done.
+Out[10]:
+Name
+Ivan
+Elena
+Задание 4. Вывести только тех студентов, фамилия которых начинается с 'S', а в имени присутствует 'a'.
+In [12]:
+
+%%sql
+%%sql
+SELECT Name
+FROM Students
+WHERE Name LIKE '%a%' and SecondName LIKE 's%';
+Done.
+Out[12]:
+Name
+Anton
+Darya
+Задание 5. Вывести только те факультеты, количество групп в которых больше 3
+In [68]:
+
+%%sql
+SELECT Faculty 
+from Students GROUP BY Faculty Having Count (distinct StudyGroup)>1;
+?
+Done.
+Out[68]:
+Faculty
